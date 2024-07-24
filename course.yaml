@@ -1,0 +1,18 @@
+tancheon_swim:
+  center: '탄천종합운동장'
+  event: '50M수영'
+  class: '수영50M_상급'
+  target: '성인'
+  course_name: '[07시] 8개월차_상급반_주5회'
+seongnam_swim:
+  center: '성남종합운동장'
+  event: '수영'
+  class: '연수반'
+  target: '성인'
+  class_name: '수영_연수1반_월,화,목,금_07:00'
+test:
+  center: '성남종합운동장'
+  event: '댄스'
+  class: '전체'
+  target: '전체'
+  class_name: '성인발레_화,목_11:30'
