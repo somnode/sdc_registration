@@ -93,7 +93,7 @@ logger.debug('Login succeed')
 driver.get(url='https://spo.isdc.co.kr/courseRegist.do')
 
 # 강좌 선택
-my_course = course['seongnam_swim']
+my_course = course['tancheon_swim']
 
 select = Select(get_element(driver, By.ID, 'center'))
 select.select_by_visible_text(my_course['center'])

@@ -9,7 +9,7 @@ do
 		echo "[$execute_date] $cnt 회" >> output.txt
 	fi
 	
-	python3 main.py
+	python3 main.py --headless True
 	exitcode=$?
 	if [[ $exitcode == 0 ]]; then
 		# exitcode가 0이면 신청 성공한 것이므로 종료.
