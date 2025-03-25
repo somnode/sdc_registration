@@ -14,6 +14,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 parser = argparse.ArgumentParser()
 parser.add_argument('--log-level', default='INFO')
 parser.add_argument('--headless', default=False)
+parser.add_argument('--course-name', required=True)
+parser.add_argument('--chromedriver-path', required=True)
 args = parser.parse_args()
 
 
@@ -65,8 +67,10 @@ chrome_options.add_argument('headless')
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-dev-shm-usage")
 if args.headless:
-    driver = webdriver.Chrome(service=Service(
-        ChromeDriverManager().install()), options=chrome_options)
+    service = Service(executable_path=args.chromedriver_path)
+    driver = webdriver.Chrome(service=service, options=chrome_options)
+    # driver = webdriver.Chrome(service=Service(
+    #     ChromeDriverManager().install()), options=chrome_options)
 else:
     driver = webdriver.Chrome()
 
@@ -93,7 +97,7 @@ logger.debug('Login succeed')
 driver.get(url='https://spo.isdc.co.kr/courseRegist.do')
 
 # 강좌 선택
-my_course = course['tancheon_swim']
+my_course = course[args.course_name]
 
 select = Select(get_element(driver, By.ID, 'center'))
 select.select_by_visible_text(my_course['center'])
