@@ -11,6 +11,7 @@ password: ...
 ```
 
 ## run
+* course.yaml에 있는 course name을 입력
 ```
-./run.sh
+./run.sh tancheon_swim
 ```
