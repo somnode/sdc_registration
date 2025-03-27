@@ -7,7 +7,6 @@ then
 fi
 
 COURSE_NAME=$1
-CHROMEDRIVER_PATH=/home1/irteam/.wdm/drivers/chromedriver/linux64/134.0.6998.165/chromedriver-linux64/chromedriver
 LOG_FILE=log_${COURSE_NAME}.txt
 
 cnt=1
@@ -19,7 +18,7 @@ do
 		echo "[$execute_date] $cnt 회" >> ${LOG_FILE}
 	fi
 
-	python3 main.py --headless True --course-name ${COURSE_NAME} --chromedriver-path ${CHROMEDRIVER_PATH}
+	python3 main.py --headless True --course-name ${COURSE_NAME}
 	exitcode=$?
 	if [[ $exitcode == 0 ]]; then
 		# exitcode가 0이면 신청 성공한 것이므로 종료.

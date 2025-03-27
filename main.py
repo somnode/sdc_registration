@@ -1,7 +1,10 @@
+import os
 import time
 import yaml
 import logging
 import argparse
+import tempfile
+import shutil
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -15,7 +18,6 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--log-level', default='INFO')
 parser.add_argument('--headless', default=False)
 parser.add_argument('--course-name', required=True)
-parser.add_argument('--chromedriver-path', required=True)
 args = parser.parse_args()
 
 
@@ -35,6 +37,13 @@ def click_button(element, key, value, timeout=10):
 def check_box(element, key, value, timeout=10):
     checkbox = get_element(element, key, value, timeout)
     driver.execute_script("arguments[0].click();", checkbox)
+
+def close(driver):
+    # WebDriver 종료
+    driver.quit()
+
+    # 임시 디렉터리 삭제
+    shutil.rmtree(tmp_profile)
 
 LOG_LEVEL = {
     'DEBUG': 10,
@@ -62,15 +71,17 @@ with open('config.yaml', 'r', encoding='utf-8') as f:
 with open('course.yaml', 'r', encoding='utf-8') as f:
     course = yaml.load(f, Loader=yaml.FullLoader)
 
+# /tmp 외의 다른 경로로 고유한 임시 폴더 생성
+os.makedirs('tmp/', exist_ok=True)
+tmp_profile = tempfile.mkdtemp(prefix="chrome-tmpdir-", dir='tmp/')
+
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('headless')
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-dev-shm-usage")
 if args.headless:
-    service = Service(executable_path=args.chromedriver_path)
-    driver = webdriver.Chrome(service=service, options=chrome_options)
-    # driver = webdriver.Chrome(service=Service(
-    #     ChromeDriverManager().install()), options=chrome_options)
+    driver = webdriver.Chrome(service=Service(
+        ChromeDriverManager().install()), options=chrome_options)
 else:
     driver = webdriver.Chrome()
 
@@ -128,6 +139,7 @@ try:
     alert = driver.switch_to.alert
     alert.accept()
 except Exception as e:
+    close(driver)
     raise e
 
 # 장바구니 화면
@@ -148,6 +160,7 @@ try:
     alert = driver.switch_to.alert
     alert.accept()
 except Exception as e:
+    close(driver)
     raise e
 
 # 결제하기 버튼 클릭
@@ -202,3 +215,6 @@ time.sleep(5)
 
 # WebDriver 종료
 driver.quit()
+
+# 임시 디렉터리 삭제
+shutil.rmtree(tmp_profile)
